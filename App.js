@@ -11,7 +11,7 @@ const bbsRoutes = require('./Routes/bbs');
 
 const db = 'mongodb+srv://passme:passgosi1q2w@cluster0-qwj1k.mongodb.net/test?retryWrites=true&w=majority';
 
-//
+//몽고디비와 지속적으로 연결하게끔 하는 것.
 mongoose.Promise = global.Promise;
 
 
