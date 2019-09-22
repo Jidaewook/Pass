@@ -12,6 +12,12 @@ const userModel = require('../Models/user');
 //const 뒤에는 임의의 변수명을 설정하고, 라우터를 익스프레스 안에서 불러온다.
 const router = express.Router();
 
+//load input Validation
+
+const validateRegisterInput = require('../Validation/register');
+
+
+
 
 // 현재 입력받은 주소: 3000/user/register
 // @route GET 3000/user/register
@@ -20,15 +26,21 @@ const router = express.Router();
 
 // 중괄호는 return값을 줄 때와 json값을 줄 때 사용한다. 나머지는 소괄호?
 router.post('/register', (req, res) => {
+    const {errors, isValid} = validateRegisterInput(req.body);
+
+    //check Validation
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
+
     userModel
         //사용자 입력값 중의 이메일(req.body.email)로 userModel안의 이메일에 해당하는 값이 있는지 찾는다.
         .findOne({email: req.body.email})
         //user는 지금 회원가입하면서 정보를 입력하는 user를 지칭하고, 이미 위에서 대조된 상태값을 지칭.
         .then(user => {
             if(user){
-                res.status(404).json({
-                    errMsg: "이미 가입된 E-mail주소입니다."
-                })
+                errors.msg = "이미 가입된 E-mail주소입니다."
+                res.status(400).json(errros);
             } else{
                 //아이디나 이메일에 아바타를 설정한다. 그 옵션을 사이즈, 레이팅?, 단위이다.
                 const avatar = gravatar.url(req.body.email, {
@@ -52,15 +64,17 @@ router.post('/register', (req, res) => {
                     .then(user => res.status(200).json({
                         userInfo: user
                     }))
-                    .catch(err => res.status(400).json({
-                        errMsg: err
-                    }));
+                    .catch(err => {
+                        errors.error = err;
+                        res.status(500).json(errors);
+                    });
 
             }
         })
-        .catch(err => res.status(400).json({
-            errMsg: err
-        }));
+        .catch(err => {
+            errors.err = err;
+            res.status(500).json(errors);
+        });
 
 })
 

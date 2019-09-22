@@ -11,8 +11,12 @@ const bbsRoutes = require('./Routes/bbs');
 
 const db = 'mongodb+srv://passme:passgosi1q2w@cluster0-qwj1k.mongodb.net/test?retryWrites=true&w=majority';
 
+//
+mongoose.Promise = global.Promise;
+
+
 //mongoDB로 db의 주소를 불러온다.
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
     .then(() => console.log('mongodb connected..'))
     .catch(err => console.log(err));
     
