@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs');
 const userModel = require('../Models/user');
 const jwt = require('jsonwebtoken');
 
+const passport = require('passport');
+
 //app내에 Api를 받아올 페이지에서는 익스프레스 안의 라우터를 불러와야 한다. 
 //const 뒤에는 임의의 변수명을 설정하고, 라우터를 익스프레스 안에서 불러온다.
 const router = express.Router();
@@ -16,8 +18,7 @@ const router = express.Router();
 
 const validateRegisterInput = require('../Validation/register');
 const validateLoginInput = require('../Validation/login');
-
-
+const authCheck = passport.authenticate('jwt', { session: false });
 
 // 현재 입력받은 주소: 3000/user/register
 // @route GET 3000/user/register
@@ -135,6 +136,43 @@ router.post('/login', (req, res) => {
         })
 })
 
+
+
+//@route Get localhost:3000/user/current
+//@desc Return current user
+//@access Private
+
+
+//authCheck = passport.authenticate('jwt', {session: false})는 인증을 위한 함수덩어리 인데, 여기서 쓰는 user는 config/passport.js에서 jwt를 통해 출력된 값이다.
+router.get('/current', authCheck, (req, res) => {
+    res.json({
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email
+    });
+});
+
+//@route Get localhost:3000/user/all
+//@desc Return All user
+//@access Private
+
+router.get('/all', authCheck, (req, res) => {
+    userModel.find()
+        .then(docs => {
+            if(docs.length <= 0){
+                return res.status(400).json({
+                    msg: 'Data is none'
+
+                });
+            } else {
+                res.status(200).json({
+                    userCount: docs.length,
+                    userInfo: docs
+                });
+            }
+        })
+        .catch(err => res.status(400).json(err));
+})
 
 
 
