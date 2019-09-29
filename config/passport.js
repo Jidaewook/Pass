@@ -3,7 +3,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
 const GooglePlusTokenStrategy = require('passport-google-plus-token');
-
+const FacebookTokenStrategy = require('passport-facebook-token');
 
 const mongoose = require('mongoose');
 const userModel = mongoose.model('users');
@@ -103,3 +103,30 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
 
 }));
 
+//Facebook OAuth Strategy
+passport.use('facebookToken', new FacebookTokenStrategy({
+    clientID: process.env.FACEBOOK_CLIENT_ID,
+    clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+}, async (accessToken, refreshToken, profile, done) => {
+    try{
+        const existingUser = await userModel.findOne({"facebook.id": profile.id});
+        if(existingUser){
+            return done(null, existingUser);
+        }
+        const newUser = new userModel({
+            method: 'facebook',
+            facebook: {
+                id: profile.id,
+                email: profile.emails[0].value,
+                avatar: profile.photos[0].value
+            }
+        });
+
+        await newUser.save();
+        done(null, newUser);
+
+
+    } catch(error){
+        done(error, false, error.message);
+    }
+}));

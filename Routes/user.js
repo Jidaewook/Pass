@@ -248,7 +248,15 @@ router.post('/oauth/google', passport.authenticate('googleToken', {session: fals
     });
 });
 
-
+//Facebook OAuth
+router.post('/oauth/facebook', passport.authenticate('facebookToken', {session: false}), (req, res) => {
+    const token = signToken(req.user);
+    console.log(token);
+    res.status(200).json({
+        msg: "successful Facebook Login",
+        tokenInfo: "bearer " + token
+    });
+});
 
 
 
