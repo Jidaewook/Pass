@@ -3,7 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const passport = require('passport');
+// const passport = require('passport');
 const dotEnv = require('dotenv');
 dotEnv.config();
 
@@ -29,9 +29,9 @@ mongoose.connect(process.env.MONGOURI, { useNewUrlParser: true, useUnifiedTopolo
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 //앱을 처음 켜면 passport를 초기화 하는 것.
-app.use(passport.initialize());
-//passport(인증)을 하기 위한 설정
-require('./config/passport')(passport);
+// app.use(passport.initialize());
+// //passport(인증)을 하기 위한 설정
+// require('./config/passport')(passport);
 
 //use는 사용자가 /user라는 요청을 넣으면 앱(userRoutes)을 사용한다. 
 app.use('/user', userRoutes);

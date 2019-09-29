@@ -94,7 +94,7 @@ UserSchema.pre('save', async function(next){
         //Generate a password hash (salt + hash)
         const passwordHash = await bcrypt.hash(this.local.password, salt);
         //Re-assign hashed version over original, palin text password
-        this.password = passwordHash;
+        this.local.password = passwordHash;
         console.log('exited');
         next();
 

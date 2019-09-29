@@ -48,3 +48,25 @@ passport.use(new JwtStrategy({
         done(error, false);
     }
 }));
+
+//LOCAL Strategy(이메일로 회원가입했을 때/로그인 했을 때의 인증과정)
+
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+}, async (email, password, done) => {
+    try{
+        const user = await userModel.findOne({"local.email": email});
+
+        if(!user){
+            return done(null, false);
+        } 
+
+        const isMatch = await user.isValidPassword(password);
+        if(!isMatch){
+            return done(null, false);
+        }
+        done(null, user);
+    } catch(error){
+        done(error, false);
+    }
+}));
