@@ -219,7 +219,7 @@ router.get('/current', authCheck, (req, res) => {
 //@desc Return All user
 //@access Private
 
-router.get('/all', authCheck, (req, res) => {
+router.get('/all', (req, res) => {
     userModel.find()
         .then(docs => {
             if(docs.length <= 0){
@@ -235,7 +235,23 @@ router.get('/all', authCheck, (req, res) => {
             }
         })
         .catch(err => res.status(400).json(err));
-})
+});
+
+
+// Google OAuth
+router.post('/oauth/google', passport.authenticate('googleToken', {session: false}) ,(req, res) => {
+    const token = signToken(req.user);
+    console.log(token);
+    res.status(200).json({ 
+        msg: "successful Google Login",
+        tokenInfo: "bearer " + token    
+    });
+});
+
+
+
+
+
 
 
 
