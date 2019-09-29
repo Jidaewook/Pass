@@ -116,7 +116,7 @@ router.post('/login', (req, res) => {
                             //sign은 webtoken을 생성하는 건데, payload라는 덩어리와, 암구어, 만료시간, 에러 또는 성공시 결과값(성공시 토큰덩어리-payload의 뭉텡이를 키한묶음으로 압축한 것)
                             jwt.sign(
                                 payload,
-                                "Owl", 
+                                process.env.SECRETKEY, 
                                 {expiresIn: 10000},
                                 (err, token) => {
                                     res.json({

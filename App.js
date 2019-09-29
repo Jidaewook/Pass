@@ -4,23 +4,24 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-
+const dotEnv = require('dotenv');
+dotEnv.config();
 
 const app = express();
 const userRoutes = require("./Routes/user");
 const profileRoutes = require("./Routes/profile");
 const bbsRoutes = require('./Routes/bbs');
 
-const db = 'mongodb+srv://passme:passgosi1q2w@cluster0-qwj1k.mongodb.net/test?retryWrites=true&w=majority';
 
 //몽고디비와 지속적으로 연결하게끔 하는 것.
 mongoose.Promise = global.Promise;
 
 
 //mongoDB로 db의 주소를 불러온다.
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+mongoose.connect(process.env.MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
     .then(() => console.log('mongodb connected..'))
     .catch(err => console.log(err));
+    
     
 
 //body-parser를 통해 bodyParser를 설정하는 과정.
@@ -42,7 +43,7 @@ app.use('/bbs', bbsRoutes);
 
 
 
-const port = 3000;
+const port = process.env.PORT || 5000;
 
 //app.listen은 서버를 실행한다는 코드.
 app.listen(port, () => console.log(`Server Running on ${port}`));
