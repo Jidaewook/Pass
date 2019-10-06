@@ -59,10 +59,30 @@ router.post('/', authCheck, (req, res) => {
         profileFields.task = req.body.task.split(',');
     }
 
-    new profileModel(profileFields)
-        .save()
-        .then(profile => res.json(profile))
+    profileModel
+        .findOne({user: req.user._id})
+        .then(profile => {
+            if(profile){
+                profileModel
+                    .findOneAndUpdate(
+                        {user: req.user._id},
+                        {$set: profileFields},
+                        {new: true}
+                    )
+                    .then(profile => res.json(profile))
+                    .catch(err => res.json(err));
+            } else{
+                new profileModel(profileFields)
+                    .save()
+                    .then(profile => res.json(profile))
+                    .catch(err => res.json(err));            }
+        })
         .catch(err => res.json(err));
+
+    // new profileModel(profileFields)
+    //     .save()
+    //     .then(profile => res.json(profile))
+    //     .catch(err => res.json(err));
 
 
 });
