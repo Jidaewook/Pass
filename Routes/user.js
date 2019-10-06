@@ -98,7 +98,10 @@ router.post('/oauth/facebook', passport.authenticate('facebookToken', {session: 
     });
 });
 
-
+// //Kakao OAuth
+// router.post('/oauth/kakao', passport.authenticate('kakao-token', {session: false}), (req, res) => {
+//     const token = signToken(req.user);
+// });
 
 
 

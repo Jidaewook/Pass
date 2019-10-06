@@ -4,6 +4,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
 const GooglePlusTokenStrategy = require('passport-google-plus-token');
 const FacebookTokenStrategy = require('passport-facebook-token');
+const KakaoTokenStrategy = require('passport-kakao-token');
 
 const mongoose = require('mongoose');
 const userModel = mongoose.model('users');
@@ -130,3 +131,14 @@ passport.use('facebookToken', new FacebookTokenStrategy({
         done(error, false, error.message);
     }
 }));
+
+// //Kakao OAuth Strategy
+// passport.use('kakao-token', new KakaoTokenStrategy({
+//     clientID: process.env.KAKAO_CLIENT_ID,
+//     clientSecret: process.env.KAKAO_CLIENT_SECRET
+// }, async (accessToken, refreshToken, profile, done) => {
+//     console.log('accessToken', accessToken);
+//     console.log('refreshToken', refreshToken);
+//     console.log('profile', profile);
+    
+// }));
