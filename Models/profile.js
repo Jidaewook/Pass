@@ -20,17 +20,17 @@ const ProfileSchema = new mongoose.Schema({
         type: String
     },
     location: {
-        type: String
+        type: [String]
     },
     testname: {
-        type: String,
+        type: [String],
         required: true
     },
     preference: {
-        type: String
+        type: [String]
     },
     task: {
-        type: String,
+        type: [String],
         required: true
     },
     date: {

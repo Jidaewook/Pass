@@ -35,7 +35,7 @@ const userModel = mongoose.model('users');
 
 //Route에서의 user 로그인 과정을 거치면, 여기에서 토큰을 받아와 인증을 하게 되고, 인증을 하면 이 함수에서 사용자 정보를 'user'로 내보낸다.
 passport.use(new JwtStrategy({
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.SECRETKEY
 }, async(payload, done) => {
     try{

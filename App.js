@@ -3,6 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 // const passport = require('passport');
 const dotEnv = require('dotenv');
 dotEnv.config();
@@ -28,6 +29,7 @@ mongoose.connect(process.env.MONGOURI, { useNewUrlParser: true, useUnifiedTopolo
 //이게 되어야, 콜렉션 작업을 할 때 쓰는 req.body.xxx가 인식된다.     
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(morgan("dev"));
 //앱을 처음 켜면 passport를 초기화 하는 것.
 // app.use(passport.initialize());
 // //passport(인증)을 하기 위한 설정

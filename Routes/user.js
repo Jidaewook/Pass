@@ -3,7 +3,8 @@ const express = require('express');
 //bcrypt는 암호를 암호화
 const bcrypt = require('bcryptjs');
 
-//회원가입 버튼을 누르면 필요한 항목을 스키마를 통해 불러오고, 콜렉션 내에 이미 가입된 이메일이 있는지 체크하기 위해 모델을 불러온다.  
+//회원가입 버튼을 누르면 필요한 항목을 스키마를 통해 불러오고, 콜렉션 내에 이미 가입된 이메일이 있는지 체크하기 위해 모델을 불러온다. 
+//가입된 유저를 유저모델에 저장하기 위해 불러와야 한다.  
 const userModel = require('../Models/user');
 
 
@@ -49,9 +50,9 @@ router.post('/login', passportSignIn, userController.login_user);
 //authCheck = passport.authenticate('jwt', {session: false})는 인증을 위한 함수덩어리 인데, 여기서 쓰는 user는 config/passport.js에서 jwt를 통해 출력된 값이다.
 router.get('/current', authCheck, (req, res) => {
     res.json({
-        id: req.user.id,
-        name: req.user.name,
-        email: req.user.email
+        id: req.user._id,
+        avatar: req.user.local.avatar,
+        email: req.user.local.email
     });
 });
 
