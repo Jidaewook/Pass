@@ -11,11 +11,24 @@ const profileModel = require('../Models/profile');
 //@desc profile에 새로 등록(post)한 게시물을 데려(get)온다. 
 //@auth private
 
-router.get('/', (req, res) => {
-    res.status(200).json({
-        msg: "profile get"
-    })
-})
+router.get('/', authCheck, (req, res) => {
+    profileModel
+        .find()
+        .populate('user', ['local.email, local.avatar'])
+        .then(docs => {
+            if(docs.length <= 0){
+                return res.status(400).json({
+                   msg: 'Data is none' 
+                });
+            } else {
+                res.status(200).json({
+                    profileCount: docs.length,
+                    profileInfo: docs
+                });
+            }
+        })
+        .catch(err => res.json(err));
+});
 
 //@route localhost:3000/profile
 //@desc profile에 새로 등록(post)한다.
