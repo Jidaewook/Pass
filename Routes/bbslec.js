@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const bbslecModel = require('../Models/bbslec');
+const profileModel = require('../Models/profile');
 const passport = require('passport');
 const authCheck = passport.authenticate('jwt', { session: false });
 //multer는 파일첨부할 수 있게 하는 라이브러리
@@ -121,4 +122,116 @@ router.post('/', authCheck, upload.single('files'), async (req, res) => {
 //         .catch(err => res.status(400).json(err));
 // })
 
+
+//@route localhost:3000/bbslec/like/:post_id
+//@desc LEC 게시글에 좋아요 누르기
+//@auth private
+
+router.post('/like/:post_id', authCheck, (req, res) => {
+    profileModel
+        .findOne({user:req.user.id})
+        .then(profile => {
+            bbslecModel
+                .findById(req.params.post_id)
+                .then(post =>{
+                    if(post.likes.filter(like => like.user.toString() === req.user.id).length > 0){
+                        return res.status(400).json({
+                            msg: "User already Liked this post"
+                        });
+                    }
+                    post.likes.unshift({user: req.user.id});
+                    post.save().then(post => res.json(post));
+                })
+                .catch(err => res.json(err));
+        })
+        .catch(err => res.json(err));
+})
+
+//@route localhost:3000/bbslec/unlike/:post_id
+//@desc LEC 게시글 좋아요 해제
+//@auth private
+
+router.post('/unlike/:post_id', authCheck, (req, res) => {
+    // profileModel
+    //     .findOne({user: req.user.id})
+    //     .then(profile => {
+    //         bbslecModel
+    //             .findById(req.params.post_id)
+    //             .then(post => {
+    //                 if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0){
+    //                     return res.status(400).json({
+    //                         msg: "You have not liked this post"
+    //                     })
+    //                 } else {
+    //                     const removeIndex = post.likes
+    //                         .map(item = item.user.toString())
+    //                         .indexOf(req.user.id)
+
+    //                     post.likes.splice(removeIndex, 1);    
+    //                     post.save().then(post => res.json(post));
+    //                 }
+    //             })
+    //             .catch(err => res.json(err));
+    //     })
+    //     .catch(err => res.json(err));
+
+
+    profileModel
+        .findOne({ user: req.user.id })
+        .then(profile => {
+            bbslecModel
+                .findById(req.params.post_id)
+                .then(post => {
+                    if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+                        return res.status(400).json({
+                            msg: "You have not liked this post"
+                        })
+                    } else {
+                        //get remove index
+                        const removeIndex = post.likes
+                            .map(item => item.user.toString())
+                            .indexOf(req.user.id)
+
+                        //splice out of array
+                        post.likes.splice(removeIndex, 1);
+
+                        //save
+                        post.save().then(post => res.json(post));
+                    }
+                })
+                .catch(err => res.json(err));
+        })
+        .catch(err => res.status(404).json({
+            msg: "no post found"
+        }));
+})
+
+
+
+// profileModel
+//     .findOne({ user: req.user.id })
+//     .then(profile => {
+//         bbsworkModel
+//             .findById(req.params.post_id)
+//             .then(post => {
+//                 if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+//                     msg: "You have not liked this post"
+//                 } else {
+//                     //get remove index
+//                     const removeIndex = post.likes
+//                         .map(item => item.user.toString())
+//                         .indexOf(req.user.id)
+
+//                     //splice out of array
+//                     post.likes.splice(removeIndex, 1);
+
+//                     //save
+//                     post.save().then(post => res.json(post));
+//                 }
+//             })
+//             .catch(err => res.json(err));
+//     })
+//     .catch(err => res.status(404).json({
+//         msg: "no post found"
+//     }));
 module.exports = router;

@@ -153,5 +153,40 @@ router.post('/like/:post_id', authCheck, (req, res) => {
         .catch(err => res.json(err));
 });
 
+//@route POST api/posts/unlike/:post_id
+//@desc Unlike post
+//@access Private
+
+//:post_id는 좋아요/좋아요취소를 위해 선택하는 게시글의 주소를 의미함
+router.post('/unlike/:post_id', authCheck, (req, res) => {
+    profileModel
+        .findOne({user: req.user.id})
+        .then(profile => {
+            bbsworkModel
+                .findById(req.params.post_id)
+                .then(post => {
+                    if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0){
+                        msg: "You have not liked this post"
+                    } else {
+                        //get remove index
+                        const removeIndex = post.likes
+                            .map(item => item.user.toString())
+                            .indexOf(req.user.id)
+
+                        //splice out of array
+                        post.likes.splice(removeIndex, 1);
+
+                        //save
+                        post.save().then(post => res.json(post));
+                    }
+                })
+                .catch(err => res.json(err));
+        })
+        .catch(err => res.status(404).json({
+            msg: "no post found"
+        }));
+        
+})
+
 
 module.exports = router;
