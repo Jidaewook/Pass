@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const bbsworkModel = require('../Models/bbswork');
+const profileModel = require('../Models/profile');
 const passport = require('passport');
 const authCheck = passport.authenticate('jwt', { session: false });
 
@@ -124,5 +125,33 @@ router.post('/', authCheck, upload.single('files'), async (req, res) => {
 //         .then(()=> res.json({success: true}))
 //         .catch(err => res.status(400).json(err));
 // })
+
+//@route POST localhost:3000/bbswork/like/:post_id
+//@desc Like bbswork
+//@access Private
+
+router.post('/like/:post_id', authCheck, (req, res) => {
+    profileModel
+        .findOne({user: req.user.id})
+        .then(profile => {
+            bbsworkModel
+                .findById(req.params.post_id)
+                .then(post => {
+                    if(post.likes.filter(like => like.user.toString() === req.user.id).length > 0){
+                        return res.status(400).json({
+                            msg: "User already liked this post"
+                        });
+                    } 
+                    //unshift는 최신순으로 보여주는 걸 의미.
+                    post.likes.unshift({user: req.user.id});
+                    post.save().then(post => res.json(post));
+                })
+                .catch(err => res.status(404).json({
+                    msg: "no Post found"
+                }));
+        })
+        .catch(err => res.json(err));
+});
+
 
 module.exports = router;
