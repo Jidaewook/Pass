@@ -4,28 +4,60 @@ const router = express.Router();
 const bbsworkModel = require('../Models/bbswork');
 const passport = require('passport');
 const authCheck = passport.authenticate('jwt', { session: false });
+
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, './uploads/')
+    },
+    filename: function(req, file, cb){
+        cb(null, new Date().toISOString() + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    //reject Files
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 3
+    },
+    fileFilter: fileFilter
+
+      
+});
+
+
 //@route localhost:3000/bbs
 //@desc bbs에 새로 등록(post)한 게시물을 데려온다. 
 //@auth private
 
 
-// router.get('/', authCheck, (req, res) => {
-//     // bbsworkModel
-//     //     .find()
-//     //     .then(docs => {
-//     //         if (docs.length <= 0) {
-//     //             return res.status(400).json({
-//     //                 msg: 'Data is none'
-//     //             });
-//     //         } else {
-//     //             res.status(200).json({
-//     //                 bbsCount: docs.length,
-//     //                 bbsInfo: docs
-//     //             });
-//     //         }
-//     //     })
-//     //     .catch(err => res.json(err));
-// });
+router.get('/', authCheck, (req, res) => {
+    bbsworkModel
+        .find()
+        .then(docs => {
+            if (docs.length <= 0) {
+                return res.status(400).json({
+                    msg: 'Data is none'
+                });
+            } else {
+                res.status(200).json({
+                    bbsCount: docs.length,
+                    bbsInfo: docs
+                });
+            }
+        })
+        .catch(err => res.json(err));
+});
 
 // router.get('/:bbsid', authCheck, (req, res) => {
 //     bbsworkModel
@@ -41,18 +73,16 @@ const authCheck = passport.authenticate('jwt', { session: false });
 // //@desc bbs에 새로 등록(post)한다.
 // //@auth private
 
-router.post('/', authCheck, async (req, res) => {
-    const newPost = new bbsModel({
-        method: req.body.workbook,
-        workbook: {
-            author: req.user._id,
+router.post('/', authCheck, upload.single('files'), async (req, res) => {
+    const newPost = new bbsworkModel({
+            user: req.user.id,
             title: req.body.title,
             desc: req.body.desc,
-            files: req.body.files,
+            files: req.file.path,
             link: req.body.link,
             // image: req.body.image
 
-        }
+        
     });
 
     await newPost.save()
