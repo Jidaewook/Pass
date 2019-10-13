@@ -104,7 +104,7 @@ router.post('/oauth/facebook', passport.authenticate('facebookToken', {session: 
 //     const token = signToken(req.user);
 // });
 
-
+// 회원탈퇴
 
 
 //이 페이지에서 내보내는 행위를 설정하는 것. 이름은 큰 의미가 없다(router라는 이름을 다른 곳에서 부르는 개념이 아님)

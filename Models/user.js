@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
 //스키마는 다루고자 하는 각각의 정보항목을 의미한다. 
-const UserSchema = new Schema({
+const userSchema = new Schema({
     // name: {
     //     type: String,
     //     required: true
@@ -81,7 +81,7 @@ const UserSchema = new Schema({
 
 
 
-UserSchema.pre('save', async function(next){
+userSchema.pre('save', async function(next){
     //pre: 뒤의 함수인 저장 전에 할 작업에 대한 설정
     try{
         console.log('entered');
@@ -104,7 +104,7 @@ UserSchema.pre('save', async function(next){
     }
 });
 
-UserSchema.methods.isValidPassword = async function(newPassword) {
+userSchema.methods.isValidPassword = async function(newPassword) {
     try{
         return await bcrypt.compare(newPassword, this.local.password);
 
@@ -115,4 +115,4 @@ UserSchema.methods.isValidPassword = async function(newPassword) {
 
 
 //몽고db에 users라는 콜렉션이 생기고 그 안에 UserSchema의 내용이 들어간다. 
-module.exports = mongoose.model('users', UserSchema);
+module.exports = mongoose.model('users', userSchema);

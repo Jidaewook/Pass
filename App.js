@@ -11,7 +11,9 @@ dotEnv.config();
 const app = express();
 const userRoutes = require("./Routes/user");
 const profileRoutes = require("./Routes/profile");
-const bbsRoutes = require('./Routes/bbs');
+
+const bbsworkRoutes = require('./Routes/bbswork');
+const bbslecRoutes = require('./Routes/bbslec');
 
 
 //몽고디비와 지속적으로 연결하게끔 하는 것.
@@ -19,7 +21,12 @@ mongoose.Promise = global.Promise;
 
 
 //mongoDB로 db의 주소를 불러온다.
-mongoose.connect(process.env.MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+mongoose.connect(process.env.MONGOURI, 
+    { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true, 
+        useCreateIndex: true
+    })
     .then(() => console.log('mongodb connected..'))
     .catch(err => console.log(err));
     
@@ -38,7 +45,8 @@ app.use(morgan("dev"));
 //use는 사용자가 /user라는 요청을 넣으면 앱(userRoutes)을 사용한다. 
 app.use('/user', userRoutes);
 app.use('/profile', profileRoutes);
-app.use('/bbs', bbsRoutes);
+app.use('/bbswork', bbsworkRoutes);
+app.use('/bbslec', bbslecRoutes)
 
 
 
