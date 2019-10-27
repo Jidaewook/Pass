@@ -1,10 +1,16 @@
 import React from 'react';
 
+import Navbar from './components/layout/Navbar';
+import Landing from './components/layout/Landing';
+import Footer from './components/layout/Footer';
+
+
 function App() {
   return (
     <div className="App">
-      <h1>DaengDaengDaeng</h1>
-      <i class="fab fa-apple fa-2x"></i>
+      <Navbar />
+      <Landing />
+      <Footer />
     </div>
   );
 }
