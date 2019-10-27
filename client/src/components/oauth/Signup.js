@@ -30,7 +30,12 @@ class Signup extends Component {
             password: this.state.password,
             password2: this.state.password2
         };
-        console.log(newUser);
+
+        axios   
+            .post('http://localhost:5000/user/register', newUser)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err.response.data));
+
     }
 
 
