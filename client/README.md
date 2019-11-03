@@ -1,4 +1,0 @@
-## Passme Front
-
-- [] bbslec
-- [] bbswork
