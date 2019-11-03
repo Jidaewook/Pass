@@ -7,7 +7,7 @@ import Footer from './components/layout/Footer';
 import Register from './components/oauth/Register';
 import Login from './components/oauth/Login';
 import Bbswork from './components/bbswork';
-import Bbslec from './components/bbslec';
+import Bbslec from './Routes/Bbslec';
 
 function App() {
   return (
