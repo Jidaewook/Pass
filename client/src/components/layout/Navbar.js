@@ -39,6 +39,16 @@ export default class Navbar extends Component {
                                 Log in
                             </Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/bbswork">
+                                bbswork
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/bbslec">
+                                bbslec
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </nav>

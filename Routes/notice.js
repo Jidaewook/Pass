@@ -49,7 +49,7 @@ router.get('/', authCheck, noticeController.notice_getall);
 // //@desc notice에 새로 등록(post)한다.
 // //@auth private
 
-router.post('/', authCheck, upload.single('files'), noticeController.notice_post);
+router.post('/', authCheck, noticeController.notice_post);
 
 //@route localhost:3000/bbslec/like/:post_id
 //@desc LEC 게시글에 좋아요 누르기

@@ -24,7 +24,7 @@ exports.bbswork_post = async (req, res) => {
         user: req.user.id,
         title: req.body.title,
         desc: req.body.desc,
-        files: req.file.path,
+        // files: req.file.path,
         link: req.body.link,
         // image: req.body.image
 
