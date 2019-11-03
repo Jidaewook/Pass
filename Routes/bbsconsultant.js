@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const consultantModel = require('../Models/bbsconsultant');
 const profileModel = require('../Models/profile');
+const bbsconsultantcontroller = require('../controller/bbsconsultant');
+
 const passport = require('passport');
 const authCheck = passport.authenticate('jwt', { session: false });
 //multer는 파일첨부할 수 있게 하는 라이브러리
@@ -42,49 +44,12 @@ const upload = multer({
 //@auth private
 
 
-router.get('/', authCheck, (req, res) => {
-    consultantModel
-        .find()
-        .then(docs => {
-            if (docs.length <= 0) {
-                return res.status(400).json({
-                    msg: 'Data is none'
-                });
-            } else {
-                res.status(200).json({
-                    consultantCount: docs.length,
-                    consultantInfo: docs
-                });
-            }
-        })
-        .catch(err => res.json(err));
-});
+router.get('/', authCheck, bbsconsultantcontroller.bbsconsultant_getall);
 
 // //@route localhost:3000/bbsstudy
 // //@desc bbsstudy에 새로 등록(post)한다.
 // //@auth private
 
-router.post('/', authCheck, upload.single('files'), async (req, res) => {
-    
-    
-    const newPost = new consultantModel({
-
-            user: req.user.id,
-            title: req.body.title,
-            desc: req.body.desc,
-            tag: req.body.tag
-    
-            
-    });
-
-    await newPost.save()
-            .then(post => 
-                res.status(200).json({
-                    msg: 'created consultant',
-                    post: post,
-                }))
-            .catch(err => res.json(err));
-
-})
+router.post('/', authCheck, upload.single('files'), bbsconsultantcontroller.bbsconsultant_post);
 
 module.exports = router;
