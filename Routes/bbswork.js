@@ -44,17 +44,17 @@ const upload = multer({
 //@auth private
 
 
-router.get('/', authCheck, bbsworkController.bbswork_getall);
+router.get('/', bbsworkController.bbswork_getall);
 
-// router.get('/:bbsid', authCheck, (req, res) => {
-//     bbsworkModel
-//         .find({_id: req.params.bbsid})
-//         .then(docs => res.status(200).json({
-//             docsCount: docs.length,
-//             doc_info: docs
-//         }))
-//         .catch(err => res.status(400).json({err}));
-// })
+router.get('/:bbsid', (req, res) => {
+    bbsworkModel
+        .find({_id: req.params.bbsid})
+        .then(docs => res.status(200).json({
+            docsCount: docs.length,
+            doc_info: docs
+        }))
+        .catch(err => res.status(400).json({err}));
+})
 
 // //@route localhost:3000/bbs
 // //@desc bbs에 새로 등록(post)한다.

@@ -8,6 +8,9 @@ const morgan = require('morgan');
 const dotEnv = require('dotenv');
 dotEnv.config();
 
+
+const cors = require('cors');
+
 const app = express();
 const userRoutes = require("./Routes/user");
 const profileRoutes = require("./Routes/profile");
@@ -30,7 +33,9 @@ mongoose.connect(process.env.MONGOURI,
     .then(() => console.log('mongodb connected..'))
     .catch(err => console.log(err));
     
+
     
+app.use(cors());    
 
 //body-parser를 통해 bodyParser를 설정하는 과정.
 //이게 되어야, 콜렉션 작업을 할 때 쓰는 req.body.xxx가 인식된다.     
@@ -42,11 +47,13 @@ app.use(morgan("dev"));
 // //passport(인증)을 하기 위한 설정
 // require('./config/passport')(passport);
 
+
+
 //use는 사용자가 /user라는 요청을 넣으면 앱(userRoutes)을 사용한다. 
 app.use('/user', userRoutes);
 app.use('/profile', profileRoutes);
 app.use('/bbswork', bbsworkRoutes);
-app.use('/bbslec', bbslecRoutes)
+app.use('/bbslec', bbslecRoutes);
 
 
 

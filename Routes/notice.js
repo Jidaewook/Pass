@@ -51,13 +51,13 @@ router.get('/', authCheck, noticeController.notice_getall);
 
 router.post('/', authCheck, noticeController.notice_post);
 
-//@route localhost:3000/bbslec/like/:post_id
+//@route localhost:3000/notice/like/:post_id
 //@desc LEC 게시글에 좋아요 누르기
 //@auth private
 
 router.post('/like/:post_id', authCheck, noticeController.notice_like);
 
-//@route localhost:3000/bbslec/unlike/:post_id
+//@route localhost:3000/notice/unlike/:post_id
 //@desc LEC 게시글 좋아요 해제
 //@auth private
 
