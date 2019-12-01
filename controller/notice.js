@@ -12,8 +12,8 @@ exports.notice_getall = (req, res) => {
                 });
             } else {
                 res.status(200).json({
-                    noticeCount: docs.length,
-                    noticeInfo: docs
+                    count: docs.length,
+                    results: docs
                 });
             }
         })
@@ -23,7 +23,6 @@ exports.notice_getall = (req, res) => {
 exports.notice_post =  async (req, res) => {
 
     const newPost = new noticeModel({
-
         user: req.user.id,
         title: req.body.title,
         desc: req.body.desc,
@@ -31,11 +30,12 @@ exports.notice_post =  async (req, res) => {
         link: req.body.link,
         tag: req.body.tag,
     });
-    await newPost.save()
+    await newPost
+        .save()
         .then(post =>
             res.status(200).json({
                 msg: 'created notice',
-                post: post,
+                post: post
             }))
         .catch(err => res.json(err));
 };

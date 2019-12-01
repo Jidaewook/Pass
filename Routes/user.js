@@ -26,23 +26,23 @@ const userController = require('../controller/user');
 
 
 
-// 현재 입력받은 주소: 3000/user/register
-// @route GET 3000/user/register
+// 현재 입력받은 주소: 5000/user/register
+// @route GET 5000/user/register
 // @desc Register User
 // @access public(아직)
 
 // 중괄호는 return값을 줄 때와 json값을 줄 때 사용한다. 나머지는 소괄호?
 router.post('/register', userController.register_user);
 
-// 현재 입력받은 주소: 3000/user/login
-// @route GET 3000/user/login
+// 현재 입력받은 주소: 5000/user/login
+// @route GET 5000/user/login
 // @desc Login user
 // @access public(아직)
 router.post('/login', passportSignIn, userController.login_user);
 
 
 
-//@route Get localhost:3000/user/current
+//@route Get localhost:5000/user/current
 //@desc Return current user
 //@access Private
 
@@ -56,7 +56,7 @@ router.get('/current', authCheck, (req, res) => {
     });
 });
 
-//@route Get localhost:3000/user/all
+//@route Get localhost:5000/user/all
 //@desc Return All user
 //@access Private
 

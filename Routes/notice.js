@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const noticeController = require('../controller/notice');
-
+const noticeModel = require('../Models/notice');
 
 const passport = require('passport');
 const authCheck = passport.authenticate('jwt', { session: false });
@@ -38,26 +38,36 @@ const upload = multer({
 
 });
 
-//@route localhost:3000/notice
+//@route localhost:5000/notice
 //@desc notice에 새로 등록(post)한 게시물을 데려온다. 
 //@auth private
 
 
-router.get('/', authCheck, noticeController.notice_getall);
+router.get('/', noticeController.notice_getall);
 
-// //@route localhost:3000/notice
+router.get('/:bbsid', (req, res) => {
+    noticeModel
+        .find({ _id: req.params.bbsid })
+        .then(docs => res.status(200).json({
+            docsCount: docs.length,
+            doc_info: docs
+        }))
+        .catch(err => res.status(400).json({ err }));
+})
+
+// //@route localhost:5000/notice
 // //@desc notice에 새로 등록(post)한다.
 // //@auth private
 
-router.post('/', authCheck, noticeController.notice_post);
+router.post('/', noticeController.notice_post);
 
-//@route localhost:3000/notice/like/:post_id
+//@route localhost:5000/notice/like/:post_id
 //@desc LEC 게시글에 좋아요 누르기
 //@auth private
 
 router.post('/like/:post_id', authCheck, noticeController.notice_like);
 
-//@route localhost:3000/notice/unlike/:post_id
+//@route localhost:5000/notice/unlike/:post_id
 //@desc LEC 게시글 좋아요 해제
 //@auth private
 

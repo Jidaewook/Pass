@@ -14,9 +14,13 @@ const cors = require('cors');
 const app = express();
 const userRoutes = require("./Routes/user");
 const profileRoutes = require("./Routes/profile");
+const noticeRoutes = require('./Routes/notice');
 
 const bbsworkRoutes = require('./Routes/bbswork');
 const bbslecRoutes = require('./Routes/bbslec');
+const bbsstudyRoutes = require('./Routes/bbsstudy');
+const bbsconsultantRoutes = require('./Routes/bbsconsultant');
+const bbserrorRoutes = require('./Routes/bbserror');
 
 
 //몽고디비와 지속적으로 연결하게끔 하는 것.
@@ -54,6 +58,10 @@ app.use('/user', userRoutes);
 app.use('/profile', profileRoutes);
 app.use('/bbswork', bbsworkRoutes);
 app.use('/bbslec', bbslecRoutes);
+app.use('/notice', noticeRoutes);
+app.use('/bbsstudy', bbsstudyRoutes);
+app.use('/bbserror', bbserrorRoutes);
+app.use('/bbsconsultant', bbsconsultantRoutes);
 
 
 

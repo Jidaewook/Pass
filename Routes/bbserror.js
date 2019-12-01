@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 const bbserrorcontroller = require('../controller/bbserror');
+const bbserrorModel = require('../Models/bbserror');
+
 const passport = require('passport');
 const authCheck = passport.authenticate('jwt', { session: false });
 //multer는 파일첨부할 수 있게 하는 라이브러리
@@ -36,14 +38,24 @@ const upload = multer({
 
 });
 
-//@route localhost:3000/bbserror
+//@route localhost:5000/bbserror
 //@desc bbserror에 새로 등록(post)한 게시물을 데려온다. 
 //@auth private
 
 
 router.get('/', authCheck, bbserrorcontroller.bbserror_getall);
 
-// //@route localhost:3000/bbserror
+router.get('/:bbsid', (req, res) => {
+    bbserrorModel
+        .find({ _id: req.params.bbsid })
+        .then(docs => res.status(200).json({
+            docsCount: docs.length,
+            doc_info: docs
+        }))
+        .catch(err => res.status(400).json({ err }));
+})
+
+// //@route localhost:5000/bbserror
 // //@desc bbserror에 새로 등록(post)한다.
 // //@auth private
 

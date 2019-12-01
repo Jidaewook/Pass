@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const bbsworkModel = require('../Models/bbswork');
-const profileModel = require('../Models/profile');
 const bbsworkController = require('../controller/bbswork');
 
 const passport = require('passport');

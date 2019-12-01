@@ -10,10 +10,13 @@ exports.bbslec_getall = (req, res) => {
                     msg: 'Data is none'
                 });
             } else {
-                res.status(200).json(docs);
+                res.status(200).json({
+                    count: docs.length,
+                    results: docs
+                });
             }
         })
-        .catch(err => res.json(err));
+        .catch(err => res.json(err.message));
 };
 
 exports.bbslec_post = async (req, res) => {
